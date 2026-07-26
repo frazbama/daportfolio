@@ -1,0 +1,6 @@
+# Keep source files private - public repo holds PDFs only
+*.pbix
+*.pbit
+**/data/
+**/Theme/
+*.csv
