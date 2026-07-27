@@ -26,8 +26,8 @@ I combine hands-on analytics skills (Power BI, Tableau, R) with deep domain know
 
 ---
 
-### 🌟 Project 1 — Alt Sweets (Trueleaf Provisions): F&B Market Expansion Dashboard
-[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/Alt%20Sweets)
+### 🌟 Project 1 — Trueleaf Provisions: F&B Market Expansion Dashboard
+[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/Trueleaf%20Provisions)
 
 A full-stack Power BI analytics project for an alternative-sweeteners F&B brand planning expansion from its established North American base (Canada, USA, Mexico) into three new international markets (UAE, UK, Saudi Arabia). The dashboard pressure-tests which markets to enter first, models entry scenarios, and flags the channels and products that protect margin as the brand scales.
 
@@ -161,7 +161,7 @@ As part of an ongoing portfolio development programme the following Power BI pro
 
 | # | Project | Sector | Status |
 |---|---------|--------|--------|
-| 1 | Alt Sweets Marketing Dashboard | F&B | ✅ Completed |
+| 1 | Trueleaf Provisions Marketing Dashboard | F&B | ✅ Completed |
 | 2 | GlowCo Dashboard | Ecommerce | ✅ Completed |
 | 3 | AdventureWorks Dashboard | Retail | ✅ Completed |
 | 4 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
