@@ -31,8 +31,6 @@ I combine hands-on analytics skills (Power BI, Tableau, R) with deep domain know
 
 A full-stack Power BI analytics project for an alternative-sweeteners F&B brand planning expansion from its established North American base (Canada, USA, Mexico) into three new international markets (UAE, UK, Saudi Arabia). The dashboard pressure-tests which markets to enter first, models entry scenarios, and flags the channels and products that protect margin as the brand scales.
 
-![Alt Sweets Market Attractiveness](Alt%20Sweets/screenshots/01_market_attractiveness.png)
-
 **The Story:** Growth ambition was outrunning evidence. Leadership wanted to expand into the Gulf and UK, but had no ranked view of which market to prioritise, what entry would cost, or which channels would quietly erode margin at scale. The board needed a decision, not a hunch. This dashboard turned three candidate markets into a ranked, defensible entry plan.
 
 **Key Findings:**
@@ -68,7 +66,7 @@ A full-stack Power BI analytics project for an alternative-sweeteners F&B brand 
 ---
 
 ### Project 2 — AdventureWorks: Sales & Returns Performance Dashboard
-[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/AdventureWorks)
+[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/Adventure%20Works)
 
 A multi-page Power BI dashboard analysing three years of AdventureWorks sales, returns and customer data across a global bike-and-accessories retailer. The build tracks revenue and profit performance, surfaces return-rate hotspots by product and territory, and profiles the customer base driving repeat purchases.
 
