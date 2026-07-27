@@ -117,17 +117,21 @@ Google Data Analytics capstone case study using R — analysing Fitbit smart dev
 
 \---
 
-## 🚀 Coming Soon
+## 📊 Portfolio Projects
+
+A growing collection of Power BI projects spanning multiple industry verticals:
 
 As part of an ongoing portfolio development programme the following Power BI projects are in development:
 
-|#|Project|Sector|Status|
-|-|-|-|-|
-|2|Digital Marketing Agency Dashboard|Marketing Analytics|🔄 In Progress|
-|3|Dental Clinic Performance Dashboard|Healthcare|📋 Planned|
-|4|Retail Clothing Store Ad Spend Analysis|Retail|📋 Planned|
-|5|Food \& Beverage Startup Marketing Dashboard|F\&B|📋 Planned|
-|6|BC Ski Resort 3-Year Performance Dashboard|Tourism|📋 Planned|
+| # | Project | Sector | Status |
+|---|---------|--------|--------|
+| 1 | Alt Sweets Marketing Dashboard | F&B | ✅ Completed |
+| 2 | GlowCo Dashboard | Healthcare | ✅ Completed |
+| 3 | AdventureWorks Dashboard | Tourism | ✅ Completed |
+| 4 | Dental Clinic Performance Dashboard | Ecommerce | 🔄 In Progress |
+| 5 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
+| 6 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
+| 7 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
 
 Each project incorporates digital marketing and ad spend data alongside core business metrics — demonstrating cross-functional analytical thinking across multiple industry verticals.
 
@@ -137,7 +141,7 @@ Each project incorporates digital marketing and ad spend data alongside core bus
 
 |Credential|Institution|Year|
 |-|-|-|
-|Advanced Visualizations in Power BI (COMP-3157)|BCIT|2026|
+|Microcredential in Data Visualization with MS Power BI | BCIT | 2026 |
 |Google Data Analytics Certificate|Google / Coursera|2024|
 
 \---
