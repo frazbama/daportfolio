@@ -70,8 +70,6 @@ A full-stack Power BI analytics project for an alternative-sweeteners F&B brand 
 
 A multi-page Power BI dashboard analysing three years of AdventureWorks sales, returns and customer data across a global bike-and-accessories retailer. The build tracks revenue and profit performance, surfaces return-rate hotspots by product and territory, and profiles the customer base driving repeat purchases.
 
-![AdventureWorks Executive Summary](AdventureWorks/screenshots/01_executive_summary.png)
-
 **The Story:** Sales were climbing, but nobody could say whether the growth was healthy. Returns were rising in the background and the mix of who was buying — and what — kept shifting. The business needed one view that connected revenue, returns and customer behaviour so it could tell profitable growth from noisy growth. This dashboard delivered that view.
 
 **Key Findings:**
