@@ -127,7 +127,7 @@ As part of an ongoing portfolio development programme the following Power BI pro
 |---|---------|--------|--------|
 | 1 | Alt Sweets Marketing Dashboard | F&B | ✅ Completed |
 | 2 | GlowCo Dashboard | Ecommerce | ✅ Completed |
-| 3 | AdventureWorks Dashboard | Tourism | ✅ Completed |
+| 3 | AdventureWorks Dashboard | Retail | ✅ Completed |
 | 4 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
 | 5 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
 | 6 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
