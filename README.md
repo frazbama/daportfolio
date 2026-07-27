@@ -126,12 +126,13 @@ As part of an ongoing portfolio development programme the following Power BI pro
 | # | Project | Sector | Status |
 |---|---------|--------|--------|
 | 1 | Alt Sweets Marketing Dashboard | F&B | ✅ Completed |
-| 2 | GlowCo Dashboard | Healthcare | ✅ Completed |
+| 2 | GlowCo Dashboard | Ecommerce | ✅ Completed |
 | 3 | AdventureWorks Dashboard | Tourism | ✅ Completed |
-| 4 | Dental Clinic Performance Dashboard | Ecommerce | 🔄 In Progress |
-| 5 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
-| 6 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
-| 7 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
+| 4 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
+| 5 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
+| 6 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
+| 7 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
+| 8 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
 
 Each project incorporates digital marketing and ad spend data alongside core business metrics — demonstrating cross-functional analytical thinking across multiple industry verticals.
 
