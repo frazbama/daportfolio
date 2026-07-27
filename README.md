@@ -117,8 +117,6 @@ A multi-page Power BI dashboard analysing three years of AdventureWorks sales, r
 
 A full-stack Power BI analytics project for a direct-to-consumer health, wellness and beauty brand operating across Canada, USA, UK and Australia. The dashboard investigates declining ROAS across paid channels and identifies the product-channel combinations driving the highest profit margins.
 
-![GlowCo Executive Summary]([GlowCo%20Ecommerce/screenshots/01_executive_summary.png](https://github.com/frazbama/daportfolio/blob/main/GlowCo%20Ecommerce/screenshots/01_executive_summary.png.png)
-
 **The Story:** Revenue was growing but profitability was under pressure. Ad spend was increasing year over year yet ROAS was quietly declining on the highest-funded channels. Someone needed to connect the dots. That someone was me.
 
 **Key Findings:**
