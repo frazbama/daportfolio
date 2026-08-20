@@ -73,7 +73,7 @@
         <div class="hint">Stored only in your browser for this session. Never sent anywhere except Google. <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--ink);">Get a key</a></div>
       </div>
       <input id="apiKey" type="password" placeholder="Paste your Gemini API key (AIza…)" />
-      <label class="hint">Model: <input id="model" type="text" value="gemini-2.5-flash" style="min-width:170px;" /></label>
+      <label class="hint">Model: <input id="model" type="text" value="gemini-flash-latest" style="min-width:170px;" /></label>
     </div>
 
     <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:28px;">
@@ -292,7 +292,7 @@ function renderAll(){
 
 async function run(){
   const key=$('apiKey').value.trim();
-  const model=$('model').value.trim()||'gemini-2.5-flash';
+  const model=$('model').value.trim()||'gemini-flash-latest';
   if(!key){ $('status').textContent='Paste your Gemini API key first.'; return; }
   const limit=+$('limit').value;
   const targets=REVIEWS.slice(0,limit);
