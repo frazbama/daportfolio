@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Sentiment Ledger — frazbama</title>
+<style>
+  :root{
+    --paper:#F3EEE3; --ink:#1C1A17; --faint:#8A8272;
+    --pos:#4A6B4F; --neg:#9A3B34; --neu:#C08A2D;
+    --line:#D9D1BF; --card:#FBF8F1;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'Iowan Old Style','Palatino Linotype',Georgia,serif;}
+  .mono{font-family:'SF Mono','Roboto Mono',ui-monospace,monospace;}
+  .wrap{max-width:1180px;margin:0 auto;}
+  header{border-bottom:2px solid var(--ink);padding:28px 32px 20px;}
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--faint);text-transform:uppercase;}
+  h1{font-size:40px;margin:8px 0 4px;font-weight:600;letter-spacing:-.01em;}
+  .sub{margin:0;color:var(--faint);font-size:15px;max-width:640px;}
+  main{padding:24px 32px 64px;}
+  .btn{cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    padding:10px 18px;font-size:14px;letter-spacing:.03em;transition:.15s;font-family:inherit;}
+  .btn:hover:not(:disabled){background:transparent;color:var(--ink);}
+  .btn:disabled{opacity:.4;cursor:default;}
+  .btn.ghost{background:transparent;color:var(--ink);}
+  .chip{cursor:pointer;border:1px solid var(--line);background:transparent;padding:5px 12px;
+    font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-family:inherit;}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .card{background:var(--card);border:1px solid var(--line);padding:20px;}
+  .rev{border-bottom:1px solid var(--line);padding:14px 0;}
+  input{font-family:inherit;}
+  input:focus{outline:1px solid var(--ink);}
+  select{font-family:inherit;background:transparent;border:1px solid var(--line);padding:6px 8px;font-size:13px;}
+  .keybox{background:var(--card);border:1px solid var(--line);padding:16px 20px;margin-bottom:24px;
+    display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+  .keybox input{background:var(--paper);border:1px solid var(--line);padding:8px 12px;font-size:14px;min-width:280px;flex:1;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);margin-bottom:28px;}
+  .kpi{background:var(--card);padding:18px 20px;}
+  .kpi .k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);}
+  .kpi .v{font-size:30px;font-weight:600;margin-top:4px;}
+  .label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .two-col{display:grid;grid-template-columns:1fr 1.4fr;gap:20px;margin-bottom:28px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px;}
+  .bar-row .name{width:130px;text-align:right;color:var(--ink);}
+  .bar-row .track{flex:1;height:20px;background:var(--paper);border:1px solid var(--line);}
+  .bar-row .fill{height:100%;background:var(--ink);}
+  .bar-row .val{width:26px;color:var(--faint);}
+  .donut{display:flex;justify-content:center;align-items:center;flex-direction:column;gap:14px;}
+  .legend{display:flex;gap:16px;font-size:14px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:12px;height:12px;display:inline-block;}
+  .complaint{border:1px solid var(--neg);color:var(--neg);padding:6px 12px;font-size:13px;}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:16px;}
+  .hint{font-size:12px;color:var(--faint);}
+  @media (max-width:760px){.two-col{grid-template-columns:1fr;} h1{font-size:30px;}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow mono">Voice-of-Customer Analysis · Powered by Gemini</div>
+    <h1>Review Sentiment Ledger</h1>
+    <p class="sub">150 Amazon customer reviews. Google's Gemini classifies each one live, then its verdict is checked against the dataset's own labels — so you can see where model and human agree.</p>
+  </header>
+  <main>
+    <div class="keybox">
+      <div>
+        <div class="label" style="margin-bottom:4px;">Your Gemini API key</div>
+        <div class="hint">Stored only in your browser for this session. Never sent anywhere except Google. <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--ink);">Get a key</a></div>
+      </div>
+      <input id="apiKey" type="password" placeholder="Paste your Gemini API key (AIza…)" />
+      <label class="hint">Model: <input id="model" type="text" value="gemini-2.5-flash" style="min-width:170px;" /></label>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:28px;">
+      <button class="btn" id="runBtn">Run AI analysis</button>
+      <label class="hint">Sample size:
+        <select id="limit">
+          <option value="30">30 reviews</option>
+          <option value="50" selected>50 reviews</option>
+          <option value="100">100 reviews</option>
+          <option value="150">150 reviews</option>
+        </select>
+      </label>
+      <span class="mono hint" id="status"></span>
+      <button class="btn ghost" id="dlBtn" style="margin-left:auto;display:none;">↓ Download report</button>
+    </div>
+
+    <div id="empty" class="card" style="text-align:center;padding:56px 20px;color:var(--faint);">
+      <div style="font-size:15px;">Paste your key, then press <strong style="color:var(--ink);">Run AI analysis</strong> to build the dashboard.</div>
+    </div>
+
+    <div id="dash" style="display:none;">
+      <div class="card" id="summaryCard" style="margin-bottom:28px;border-left:3px solid var(--ink);">
+        <div class="label">AI Executive Summary <span id="sumStatus" class="mono" style="color:var(--faint);"></span></div>
+        <p id="summaryText" style="margin:0;font-size:16px;line-height:1.6;"></p>
+      </div>
+
+      <div class="kpi-grid" id="kpis"></div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="label">Sentiment mix</div>
+          <div class="donut">
+            <svg id="donut" width="180" height="180" viewBox="0 0 180 180"></svg>
+            <div class="legend">
+              <span><i class="sw" style="background:var(--pos);"></i>positive</span>
+              <span><i class="sw" style="background:var(--neu);"></i>neutral</span>
+              <span><i class="sw" style="background:var(--neg);"></i>negative</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Most-mentioned themes</div>
+          <div id="themes"></div>
+        </div>
+      </div>
+
+      <div class="card" id="complaintsCard" style="margin-bottom:28px;display:none;">
+        <div class="label">Leading complaints (negative reviews)</div>
+        <div id="complaints" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;">
+        <button class="chip on" data-f="all">all</button>
+        <button class="chip" data-f="positive">positive</button>
+        <button class="chip" data-f="neutral">neutral</button>
+        <button class="chip" data-f="negative">negative</button>
+        <input id="search" placeholder="Search reviews…" style="margin-left:auto;background:var(--card);border:1px solid var(--line);padding:8px 12px;font-size:14px;min-width:200px;" />
+      </div>
+      <div class="card" id="reviewList" style="max-height:520px;overflow-y:auto;"></div>
+      <div class="hint" id="listCount" style="margin-top:10px;"></div>
+    </div>
+
+    <footer>
+      <div class="mono hint">Built by <strong style="color:var(--ink);">frazbama</strong> · Data: Amazon Reviews Dataset · Daniel Ihenacho · Kaggle · MIT License · Sentiment classified live by Gemini, validated against dataset labels.</div>
+    </footer>
+  </main>
+</div>
+
+<script>
+const REVIEWS = [{"id":0,"text":"the sleek design is perfect easily slips into briefcase without being too bulky and the sleep mode is awesome","datasetSentiment":"positive","score":3.0},{"id":1,"text":"this is the best mouse that ve used in long time no batteries needed just charge it when needed ve used this for little over day and it doing great","datasetSentiment":"positive","score":5.0},{"id":2,"text":"idk if would say this is great mouse for gaming but it great for the price and very smooth different setting are great too flip the lights on and it like rave in your hand","datasetSentiment":"positive","score":5.0},{"id":3,"text":"an attractive high performing speaker that exceeded my expectations first the bad news did have difficulty at first pairing my phone with the speaker the included instructions were no help and would have liked to see bit more detail it just series of what look like comic book panels begrudgingly downloaded the jbl portable app found bit more information and was able to pair straight out of the box the sound is bit disappointing the speaker did not produce much bass and was really heavy in the upper midrange and high frequencies would highly recommend downloading an equalizer app on your music ","datasetSentiment":"positive","score":5.0},{"id":4,"text":"i wish it were just little louder but over all the sound is great","datasetSentiment":"positive","score":5.0},{"id":5,"text":"not worth it window to return is small broke in month","datasetSentiment":"negative","score":5.0},{"id":6,"text":"bought it expecting to be able to use it and it didn have the adapter like it is stated","datasetSentiment":"neutral","score":5.0},{"id":7,"text":"i am big on reviews peoples honest opinions when it counts as for style it nice mouse but for the main purpose of the mouse it is not good even if it completely charged it will only work for about minutes before it starts to freeze then eventually go dead it very frustrating annoying especially if you work from home would of posted pic but am in the process of returning it don feel like getting it","datasetSentiment":"negative","score":2.0},{"id":8,"text":"sound quality is excellent we play it for more than hours day and the battery life is great","datasetSentiment":"positive","score":4.0},{"id":9,"text":"daughter my love them she doesn have to hear my while doing either thing lol","datasetSentiment":"positive","score":3.0},{"id":10,"text":"it looks great and is easy to use","datasetSentiment":"positive","score":1.0},{"id":11,"text":"it cheap and good","datasetSentiment":"neutral","score":4.0},{"id":12,"text":"star just for the misleading title maybe the public is too ignorant to realize that waterproof and water resistant are not even the same discussion","datasetSentiment":"negative","score":5.0},{"id":13,"text":"i bought this mouse to go with my work laptop when have to travel to sites hate using the pad that is built into the laptop this is cute and little am thinking about using it for my personal laptop when gaming or doing school work","datasetSentiment":"neutral","score":5.0},{"id":14,"text":"worked one time after that my daughter couldn get them to connect again","datasetSentiment":"neutral","score":5.0},{"id":15,"text":"might work for low use we shall see and ll update this review after week or so of use update received aug mouse died sep rip","datasetSentiment":"negative","score":1.0},{"id":16,"text":"this item came broken we tried charging it over night but it never worked had to return it","datasetSentiment":"neutral","score":1.0},{"id":17,"text":"kept skipping wouldn track properly although right next to ipad","datasetSentiment":"neutral","score":5.0},{"id":18,"text":"this mouse saves ton in cost of batteries because it is rechargeable it fits the palm of my hand very comfortably well worth the cost","datasetSentiment":"positive","score":5.0},{"id":19,"text":"this mouse was wonderful when it worked but it stopped after just over month it will not hold charge and is of no use now unfortunately the return window has passed would not suggest purchasing this item","datasetSentiment":"negative","score":5.0},{"id":20,"text":"great mouse nothing super fancy comfortable to use the lights are pretty cool but there is an option to not have them on which is great to extend battery life holds charge really well and will still work with the usb charger plugged in if necessary plugged in to different computers and worked immediately on both seems quite reaponsive but only use it for general computer work so dont know how it would work for gaming all in all great mouse for decent price will update if anything changes","datasetSentiment":"positive","score":1.0},{"id":21,"text":"the product lasts about minutes and dies have charged it so many times and it still needs to be plugged in to work even when plugged in it still only lasts another minutes seller is in violation of amazon terms of agreement continually contacting customer private email asking to remove review review is factual and customer will continue to report abuse to amazon through email community help com do not purchase product due to poor quality and unregulated customer service practices","datasetSentiment":"negative","score":4.0},{"id":22,"text":"new update of all the damn products have bought did not buy an extended warranty for this product so guess am screwed update update not only is this keyboard is loud ad it finally stopped working thank god for year warranties update change the rating to star the keys have become louder over time please don buy this keyboard my friends on the phone say how loud the keys are all the time now want my money back granted they are not the clacky mechanic keys but close guess need membrane keys will try to take handed video later but every time hit the spacebar holy crap the damn noise it my fault wa","datasetSentiment":"neutral","score":4.0},{"id":23,"text":"great mouse especially for the price the led lights are awesome works perfect and easily connects to your device","datasetSentiment":"positive","score":4.0},{"id":24,"text":"sound quality is great the quality of the headset itself was great too noise cancellation was good as well and they feel very comfortable on the ears","datasetSentiment":"positive","score":5.0},{"id":25,"text":"i love it it works perfect and love that it changescolors if you want","datasetSentiment":"positive","score":5.0},{"id":26,"text":"i bought this in late june it looks cool with the lights and all it doesn give warning that the battery is low just stops working now it is doing all kinds of weird stuff clicking on items that you didn etc too late to return oh well not recommended","datasetSentiment":"neutral","score":1.0},{"id":27,"text":"i have now purchased of these computer mice both of which have broken and become unusable within just few weeks with the first one thought got defective item so returned it and got the same model again for exchange now that one has broken too conveniently just days outside the return window in both instances the click wheel stopped functioning making scrolling impossible these were handled with care in my home office and not used improperly or dropped or exposed to moisture etc they just seem very cheaply made the led lights were nice feature but meaningless without functioning mouse as far as","datasetSentiment":"negative","score":5.0},{"id":28,"text":"i really like very helpful","datasetSentiment":"positive","score":5.0},{"id":29,"text":"i would be as bothered by the fact the charge switched to mono if they would ve at least centered the damn speaker blows my mind the majority of people that buy this will probably think the thing is broken because of that no way would pay full price for the charge when the is stereo much cheaper and likely sounds better","datasetSentiment":"negative","score":5.0},{"id":30,"text":"less months old worked great at first and now it won charge it crap","datasetSentiment":"positive","score":2.0},{"id":31,"text":"broke within two hours of using it you really gotta watch the amazon return policy on electronics have tendency to buy it and leave it sitting in the box for way too long bad me because this is the second or third time ve gotten burned on crap like this","datasetSentiment":"negative","score":1.0},{"id":32,"text":"i love the quiet click no more obnoxious loud clicking","datasetSentiment":"positive","score":3.0},{"id":33,"text":"month update this thing squeals now it took me week to figure out why kept hearing high pitched whine every time moved my cursor and eventually realized that something inside the mouse is creating very high pitched squeal every time move it that on top of the mouse dying in about day of use now means that this thing is no go definitely buy something else this thing has been total headache since got it the battery on this mouse doesn seem to last very long time after about two days of usage it ll die find myself plugging it in every night to make sure don have to deal with that additionally the","datasetSentiment":"negative","score":5.0},{"id":34,"text":"felt cheap returned for better product","datasetSentiment":"neutral","score":3.0},{"id":35,"text":"i can hear but the mic has never worked even after much troubleshooting they re also pretty uncomfortable compared to other headphones ve had","datasetSentiment":"neutral","score":5.0},{"id":36,"text":"light weight very easy to use charging lasts for long like that it has the usb attachment in mouse making it perfect for travel","datasetSentiment":"positive","score":5.0},{"id":37,"text":"the led lights are pretty but otherwise this mouse is not responding well and overall does not handle too well am disappointed and would not buy it again","datasetSentiment":"negative","score":3.0},{"id":38,"text":"first one received would not stay connected wire less wired was no better amazon sent replacement that worked right out of the box thank you amazon","datasetSentiment":"neutral","score":5.0},{"id":39,"text":"love how it looks and feels but out the box it was really glitchy charged it and saw that it was still sticking bit as was using it since it mouse the one thing it should do is move smoothly ya know don know if this was just this one mouse or it how it runs either way it really annoying when you re trying to get things done","datasetSentiment":"negative","score":5.0},{"id":40,"text":"sound quality for entertainment","datasetSentiment":"neutral","score":4.0},{"id":41,"text":"overall the speaker is great it is quite bit hefty but that is to be expected with all the rubber keeping it waterproof as well as the rest of the hardware inside the battery life is pretty spot on with about hour of constant usage and the sound is clear and loud very much worth the purchase and if you catch it on sale even more so","datasetSentiment":"positive","score":5.0},{"id":42,"text":"i used this mouse once after this use it died so was going to charge it up figuring didn give it enough time to charge tried different times and it wouldn charge at all so decided to just go back to my old mouse tried to remove the usb and the metal part broke off and stayed inside my laptop so had to remove it and there was no fixing it so disappointed in the quality of this mouse","datasetSentiment":"negative","score":4.0},{"id":43,"text":"at first really loved this mouse fast connection and worked well but like several other reviews mentioned after about months it just stopped working it didn charge or anything it just literally stopped working for that alone would rate it bad pedi to because it doesn last didn drop it or beak it it simply stopped working","datasetSentiment":"negative","score":2.0},{"id":44,"text":"my daughter loves it no complaints here","datasetSentiment":"positive","score":4.0},{"id":45,"text":"great for the price","datasetSentiment":"positive","score":4.0},{"id":46,"text":"this product is crap do not buy opened fresh out of the box and immediately had trouble lightweight and cheap feeling does not slide particularly well although sleek it isn the most ergonomic thing but worst of all after plugging in and turning on the mouse will work normally for around secs if you leave it idle for longer than that the response becomes choppy and the mouse essentially stops working tried on multiple devices to no avail do not buy in most cases id say you get what you pay for but here it feels like even less than that","datasetSentiment":"negative","score":5.0},{"id":47,"text":"carry it in backpack at work field applications days week it hard core certainly can take beating","datasetSentiment":"neutral","score":3.0},{"id":48,"text":"i actually really love this mouse its slim and quiet the multicolored led lights stopped working after days but it does not affect the quality of it just bummer they dont work anymore","datasetSentiment":"neutral","score":5.0},{"id":49,"text":"the sound quality is on par maybe slightly better than other units in this price point easy to wear not heavy at all the noise canceling is not the best but was not expecting anything crazy good works well for the kids when gaming the lights give it that wow factor for the kids no issues here","datasetSentiment":"positive","score":4.0},{"id":50,"text":"this keyboard randomly starts having wrong keystroke inputs for example pressing types pressing tab types started happening months after purchasing never buying this brand again","datasetSentiment":"neutral","score":5.0},{"id":51,"text":"nothing special about this keyboard not fond of the manufacturers website adding to this review after less than year of use the battery is failing one of the issues is the forced keyboard lighting there is no way to turn it off while the keyboard saw heavy use the main function wireless is hampered by poor design am reducing my review to reflect this issue after testing do not recommend this product","datasetSentiment":"negative","score":5.0},{"id":52,"text":"i got this for my laptop and it does not work very well it skips or just does not move at all gave it to my grandson thinking that since it says it for gaming that maybe it would work better for him but he does not like it at all he says the feel of it is off and it does not stay connected","datasetSentiment":"neutral","score":4.0},{"id":53,"text":"i use this mouse with my laptop it worked pretty good when first got it then the wheel quit working have no idea why","datasetSentiment":"positive","score":1.0},{"id":54,"text":"good for kids gaming experience with good price","datasetSentiment":"positive","score":5.0},{"id":55,"text":"when bought it expecting it to last more than month then last week noticed something wasn right sure enough the end oof the wire that plugs into the pc was breaking and really was happy with it at first not having to buy batteries for it","datasetSentiment":"positive","score":5.0},{"id":56,"text":"don waste your money on this mine stop working within the first month of having it","datasetSentiment":"negative","score":5.0},{"id":57,"text":"i bought this mouse twice because wasn able to return them in time due to mailing issues thought the first one must be an error since it broke after hours of use guess how long the second mouse lasted hours absolute crap product and wasted my money","datasetSentiment":"negative","score":4.0},{"id":58,"text":"i bought it because had low budget and needed one to game the mic quality is really good for this price and the headphone volume is good enough the noise cancellation is spot on as well make sure to buy because it is very good","datasetSentiment":"positive","score":1.0},{"id":59,"text":"good size and shape but unfortunately the scrolling wheel broke un the first month","datasetSentiment":"negative","score":3.0},{"id":60,"text":"the mouse works fine but was disappointed that the color did not match my macbook as it shows","datasetSentiment":"negative","score":2.0},{"id":61,"text":"got it for my brother and he has no issue with it his only complaint was that the lights weren customizable","datasetSentiment":"negative","score":5.0},{"id":62,"text":"the mouse is not effective charged for hours still no life or function do not buy when noticed that the mouse was not working charged it for hours tried the mouse again and it still did not work but showed red as one of the colors which may be warning the seller did not respond or reply to assist me with any troubleshooting unsatisfied customer","datasetSentiment":"negative","score":5.0},{"id":63,"text":"it was working well until it just stopped working after months it won charge and turn on anymore pretty much useless now not well made and it waste of money if you re looking for reliable and and an item that will last long do not get this one coz you will be disappointed tried my luck and didn listen to the reviews read now am so disappointed could have spend more to most reliable and long lasting one","datasetSentiment":"negative","score":4.0},{"id":64,"text":"a little after month the connection where the wire meets the plug for the controller went bad now the headset is useless do yourself favor and get either wireless or better made headset","datasetSentiment":"neutral","score":5.0},{"id":65,"text":"bought these headphones for my son to use with his ps he can hear others just fine but the mic doesn work very disappointing just arrived and took it out of the box today","datasetSentiment":"negative","score":1.0},{"id":66,"text":"left button not working after months for not worth it save you money and look for better one the last","datasetSentiment":"neutral","score":5.0},{"id":67,"text":"the calibration on this is terrible can even use it it goes all over the place doesn go where im directing it to go make calls for work on my computer and it hung up when was clearly going to the opposite side of the screen it terrible","datasetSentiment":"negative","score":5.0},{"id":68,"text":"like other reviews stated this mouse is super nice smooth and looks neat but lasted just over the day return window put it on charge for the th time since had received it and the blue light comes on indicating it is charging and goes off some time later indicating it is complete when you switch it on the red light flashes and then goes off highly disappointing","datasetSentiment":"neutral","score":5.0},{"id":69,"text":"literally only had the mouse for three days and used it on the first day and now it has stopped working it doesn charge plug it up and it may charge for minutes then it just stops charging then when go to turn it on it just turns on and instantly turns off this mouse is literally piece of crap will be getting my money back","datasetSentiment":"negative","score":5.0},{"id":70,"text":"works very well with my desk top computer don play games","datasetSentiment":"positive","score":5.0},{"id":71,"text":"just got this and let see if it worth it wil come back to leave the after use review","datasetSentiment":"neutral","score":5.0},{"id":72,"text":"i ve had this speaker for less than year and have for the most part absolutely loved it use it in my car for long road trips and when the speakers in my laptop blew out started using it every day for podcasts etc from my laptop unfortunately the battery is just not holding charge it flashes red indicating low battery and then reads fully charged when plug it in after less than minute totally inaccurate as it reverts to flashing red again in about minutes very frustrating and ridiculously hard to change the battery myself don own the right tools so now in the market for new speaker","datasetSentiment":"negative","score":5.0},{"id":73,"text":"the voice not as high as excepted but it did the jop liked the design didnt like the yellow shade though","datasetSentiment":"neutral","score":1.0},{"id":74,"text":"the headset is nice but the cord on the actual product is different from the instructions there are two jacks one for the game controller and usb connection to power the lights if you look at the pictures the split is further down closer to the jacks than what is explained in the instructions doubt anyone would be able to use the lights unless they re sitting next to an outlet also there isn much room to use the controller if the usb is connected to power source poor design of the cord","datasetSentiment":"negative","score":4.0},{"id":75,"text":"i love it best mouse ve had","datasetSentiment":"positive","score":3.0},{"id":76,"text":"this keyboards has decent design however it disconnects very often it completely useless if can use it","datasetSentiment":"neutral","score":4.0},{"id":77,"text":"product died almost immediately after warranty period expired will not charge or turn on","datasetSentiment":"negative","score":5.0},{"id":78,"text":"i really loved the size and feel as well as how quiet it was but it only lasted about months before it completely crapped out and never worked again suppose it good short term solution","datasetSentiment":"positive","score":1.0},{"id":79,"text":"battery only lasted hrs after fully charged not recommend returning it","datasetSentiment":"negative","score":3.0},{"id":80,"text":"sometimes the keyboard will straight stop working then all your inputs pop in all at once more than minute later","datasetSentiment":"neutral","score":3.0},{"id":81,"text":"save your money and buy hyper or turtle beach headset these are trash","datasetSentiment":"neutral","score":5.0},{"id":82,"text":"perfect for gaming my grandson loved the different colors","datasetSentiment":"positive","score":5.0},{"id":83,"text":"i have macbook and this mouse required two plugins since take my mac with me the chances of these plugins being lost was pain","datasetSentiment":"negative","score":1.0},{"id":84,"text":"dissatisfied with purchase mouse works except for the scrolling wheel","datasetSentiment":"neutral","score":5.0},{"id":85,"text":"it shame because love it but the keyboard has problems with several keys so far have verified that the keys and fail in the case of it sometimes works but not many","datasetSentiment":"negative","score":1.0},{"id":86,"text":"the keyboard feels great looks great but it not nearly special enough for how often it needs to be plugged in it has died on me in the worst situations never any sort of warning and happens roughly once every weeks would much rather have hardwired or battery operated keyboard than this battery life is frankly unacceptable","datasetSentiment":"negative","score":4.0},{"id":87,"text":"i bought one for my daughter years ago now it was my turn to have great sound","datasetSentiment":"positive","score":2.0},{"id":88,"text":"easy to use charge lasts long time","datasetSentiment":"neutral","score":3.0},{"id":89,"text":"the mouse was decent for the price however now just about weeks out of my return window and the scroll stopped working on the mouse days ago was hoping it was random temporary issue but it seems it permanent disappointed that can at least return or exchange the item and now have to go and buy new mouse","datasetSentiment":"negative","score":3.0},{"id":90,"text":"the rest of the mouse is fine but the scroll wheel no longer scrolls took just over month for it to break so can even return it now","datasetSentiment":"neutral","score":5.0},{"id":91,"text":"i really like this mouse","datasetSentiment":"neutral","score":5.0},{"id":92,"text":"stoped working after few weeks it won charge","datasetSentiment":"positive","score":1.0},{"id":93,"text":"works great very reactive colors look fantastic while they go through all the different colors as well as has an option for just red if you re not feeling fancy","datasetSentiment":"positive","score":5.0},{"id":94,"text":"i work from home and have to run more than one screen and this mouse was amazing when bought it now it has decided that it doesn want to charge and is currently useless after only week was about to buy another one for my mom but have canceled it now since this one has stopped working it sucks because it such fun mouse it also never leaves my home office so know it not from packing or moving it around lot","datasetSentiment":"neutral","score":5.0},{"id":95,"text":"i think that for the price it was its extremely good if your looking for cheaper headset to do the exact same as an expensive headset recommend this one very good noise cancelation as well","datasetSentiment":"positive","score":1.0},{"id":96,"text":"jbl over priced by far","datasetSentiment":"neutral","score":5.0},{"id":97,"text":"i haven had any issues at all using this mouse it feels great the silent clicks and led lights add really cool touch to it as well","datasetSentiment":"positive","score":3.0},{"id":98,"text":"disappointed no usb or booklet supplied","datasetSentiment":"negative","score":5.0},{"id":99,"text":"bought for special gift it was well received","datasetSentiment":"positive","score":5.0},{"id":100,"text":"hopefully mine was the outlier because mine was bricked on arrival power button only lit up while plugged in and even then none of the buttons would function and the unit would not play music even when showing full battery have flip already which love and am highly disappointed had to get refund expected better from jbl","datasetSentiment":"positive","score":5.0},{"id":101,"text":"sound wouldn go directly only into headphones customer service only cares about bad reviews with no intention to do the customer right","datasetSentiment":"neutral","score":5.0},{"id":102,"text":"cursor would only work couple minutes then freeze up love the look shape but it completely useless","datasetSentiment":"neutral","score":5.0},{"id":103,"text":"great speaker esp if you live near the beach loud with good quality sound can link bunch of them together for surround sound anywhere","datasetSentiment":"positive","score":3.0},{"id":104,"text":"powerful little guy good bass good volume looking for good wireless speaker this will not dissapoint","datasetSentiment":"positive","score":5.0},{"id":105,"text":"no stars will be given this item holds no charge and interferes with the rest of my computer this item is not useable it trusted","datasetSentiment":"negative","score":3.0},{"id":106,"text":"i bought this keyboard to replace my old one because my daughter spilt her drink on it this keyboard has worked out perfectly it keeps long charge and is easy to move around have my home office set up at the kitchen table my daughter also uses it for school love that it is not too bright but lights up just enough to see the keys when needed would recommend this to anyone with kids and those who needs to move around their work area frequently","datasetSentiment":"positive","score":1.0},{"id":107,"text":"i really liked this mouse very convenienthowever bought it less that months ago and the wheel stopped workingvery disappointed","datasetSentiment":"neutral","score":1.0},{"id":108,"text":"bought for my yo and he loves them the led lights look super cool","datasetSentiment":"positive","score":5.0},{"id":109,"text":"this is great value mouse purchased it to go with my new laptop so didn have to depend on the trackpad the design is nice and colors are great addition","datasetSentiment":"positive","score":2.0},{"id":110,"text":"this mouse came broken very upset it was delivered in time but the devise itself was broken the package was opened it wasn even inside the actual box it ridiculous definitely going to get my money back gave it star because had no choice but too","datasetSentiment":"negative","score":1.0},{"id":111,"text":"do not buy this mouse stopped working august st yesterday thought it was just dead so made sure to charge it this morning go to use the mouse and it still is not working despite it being fully charged it just doesn turn on anymore am extremely disappointed because just bought this mouse on june th meaning that the return window closed on july th this mouse stopped working entirely doesn even turn on anymore two days after the return window closed do not buy this product if could give it less stars would","datasetSentiment":"negative","score":5.0},{"id":112,"text":"so far so good this speaker gets loud without distortion love it and the color so much also like that it can charge my phone it convenient because my area is often plagued by wind storms and power outages sure ll be using it for that soon enough it was super easy to connect haven had any issues with the bluetooth connectivity the battery life is very good","datasetSentiment":"positive","score":5.0},{"id":113,"text":"it work good but not great","datasetSentiment":"negative","score":5.0},{"id":114,"text":"mic has always been quiet but after few months the mic stopped working at all","datasetSentiment":"neutral","score":4.0},{"id":115,"text":"i don like it","datasetSentiment":"neutral","score":4.0},{"id":116,"text":"i bought it for work it so smooth color is matte black led lights are so cool and fun doesn make any clicking sound is rechargeable very happy with this purchase","datasetSentiment":"positive","score":5.0},{"id":117,"text":"i splurged and bought an expensive keyboard it stopped working in month with light use tried to resync the dongle and spent several hours troubleshooting am totally disappointed","datasetSentiment":"negative","score":5.0},{"id":118,"text":"quite cute and very portable","datasetSentiment":"positive","score":5.0},{"id":119,"text":"i only used it once until it was dead and then charged for hours it wouldn even turn on so in all the charging feature does not work it was cute mouse though but it doesn work","datasetSentiment":"neutral","score":5.0},{"id":120,"text":"not great item for long term use could be more sturdy","datasetSentiment":"negative","score":5.0},{"id":121,"text":"it was going well for few weeks then my son dropped his macbook and the usb type connected broke its so easy to break and would not recommend","datasetSentiment":"neutral","score":1.0},{"id":122,"text":"i like this item lot very fairly priced and the low profile makes it easy on my hand don have the largest hands but not very small either and mouse with high hump is very uncomfortable this solves that problem nicely could do without the sleep mode am still getting used to waking it up and understand the value of sleep mode so deal with it never having to deal with batteries is also bonus charging it overnight is ideal but have already forgotten couple of nights and it fine if necessary you can plug it in and use it while it charges","datasetSentiment":"positive","score":1.0},{"id":123,"text":"this mouse is ergonomic light weight and very easy to use unfortunately the color shown in the picture for rose gold was not very accurate it is much darker would still buy it again though","datasetSentiment":"neutral","score":5.0},{"id":124,"text":"this wireless mouse works great it light and connected right to my macbook air with no problem","datasetSentiment":"positive","score":5.0},{"id":125,"text":"dont buy stopped working after weeks","datasetSentiment":"neutral","score":4.0},{"id":126,"text":"this keyboard is great it works exactly as advertised the keys are quiet the design is very fluid and the lights are cool charged it once when it came out of the box and have used it for hours doing work and playing games still haven had to recharge great product definitely worth the money","datasetSentiment":"positive","score":5.0},{"id":127,"text":"i don like the way its been sound when music is on it skip some small parts of the music it sounds like the fake once what like about is the style and how its super loud","datasetSentiment":"positive","score":5.0},{"id":128,"text":"great sound it simplicity is it key it is meant to be an outdoor speaker and to fill up wider area so don listen to those who complain it not stereo stereo is useless if it speakers are so close together it not too big the accessories you can buy are good like the rubber carry case and the hard case as well","datasetSentiment":"positive","score":5.0},{"id":129,"text":"i just got these mins ago and tried them first off it doesn light up unless you plug both ends into port which means console players won get the light up second it just all around horrible with its sound thee most quiet whisper like sound bought it on the grounds of the high rating and good reviews but it didn come close to standards don know if this is just defective or what but this ain it and am quite disappointed in the money just gave to company that couldn even hold standard for gaming","datasetSentiment":"negative","score":5.0},{"id":130,"text":"i was looking for wireless rechargeable mouse because recently lost my old mouse but kind of glad did because really love this one it super cute sleek and the lights are so pretty the clicks are quiet like it says in the description and easy to use would recommend this to anyone looking for mouse","datasetSentiment":"positive","score":5.0},{"id":131,"text":"sucks broke in month","datasetSentiment":"negative","score":5.0},{"id":132,"text":"the calibration on this is terrible can even use it it goes all over the place doesn go where im directing it to go make calls for work on my computer and it hung up when was clearly going to the opposite side of the screen it terrible","datasetSentiment":"negative","score":3.0},{"id":133,"text":"i bought this for my significant other solin he uses jbl pa self powered speakers on stands in his recording studio and on gigs he perfectionist and he hears everything in music if speaker has too much high end it too bright he likes warm analog type of sound he loves the beatles and portrayed john lennon in beatlemania so he has heavy beatles influence on his original music my year old nephew visited with this jbl bluetooth and was delighted that solin loved it and he said of course it great it jbl we absolutely love this speaker great quality great price","datasetSentiment":"positive","score":5.0},{"id":134,"text":"i ve had this for few weeks and it already useless it won charge when connected horrible","datasetSentiment":"neutral","score":1.0},{"id":135,"text":"had it for only one day until accidentally dropped it from less than meter and the stroller wheel broke could fix it with superglue but come on shouldn have to do that it was cheaply made and it literately broke day if you re thinking of buying this don let me stop you from trying it just don drop it","datasetSentiment":"negative","score":5.0},{"id":136,"text":"this mouse is just trash it lifespan is days stopped working just days after the return window closed don recommend purchasing if you want something that is actually functional and long lasting getting tired of amazon allowing vendors sell junk without recourse","datasetSentiment":"neutral","score":3.0},{"id":137,"text":"mouse is comfortable to use silent clicks however failed after only months of use use every day for maybe couple of hours at time turned off when not in use and plugged in when necessary died about week ago after having for only months would not recharge will not use rechargeable mouse again would rather use rechargeable batteries","datasetSentiment":"negative","score":5.0},{"id":138,"text":"not very good honestly it doesn get very bright and there is on different light modes most of the keys are only half lit and is hard to see during the day all in all not impressed with it will be returning it not worth the money","datasetSentiment":"negative","score":4.0},{"id":139,"text":"i hate this mouse doesn stay charged and sleep mode kicks in too quickly","datasetSentiment":"negative","score":1.0},{"id":140,"text":"i started using this product exactly month ago it will not work now unless it plugged into the charger which defeats the purpose of wireless mouse can recommend","datasetSentiment":"neutral","score":5.0},{"id":141,"text":"tested this out after charging it so far so good","datasetSentiment":"positive","score":2.0},{"id":142,"text":"love the slimline appearance and the changing colors the colors add sense of fun to normally mundane piece of computer equipment also love the ability to keep it one color red or allow it to change colors and the ability to change the speed of the cursor good product well designed make sure you are aware of the button on the bottom as it is not just an on off switch but has three positions this is now october this mouse broke after little use while traveling the scroll wheel broke inside the mouse making it useless this appears to be poor design and weak point in this item and would now not re","datasetSentiment":"negative","score":5.0},{"id":143,"text":"basic mouse at reasonable price","datasetSentiment":"neutral","score":5.0},{"id":144,"text":"can just say wow this mouse is absolutely incredible the wireless feature and led lights make this thing steal for its price it is super helpful when want to stay in bed but still use my pc from afar can just pull this bad boy out and start going it has silent clicks to it as well so you wont be waking or bothering anybody buy using this mouse and with its low profile shape and structure it takes up practically no room whatsoever","datasetSentiment":"negative","score":5.0},{"id":145,"text":"it been about months since bought this the piece that goes into your laptop to make it wireless completely fell apart and mouse no longer clicks would not recommend","datasetSentiment":"negative","score":3.0},{"id":146,"text":"you get what you pay for","datasetSentiment":"neutral","score":2.0},{"id":147,"text":"horrible garbage don wast your money","datasetSentiment":"negative","score":1.0},{"id":148,"text":"comfortable with great sound and mic quality definitely recommend","datasetSentiment":"positive","score":5.0},{"id":149,"text":"this was christmas gift for my granddaughter to accompany her new laptop she loved it and the color coordinated very well with her computer and other accessories am very pleased with the item","datasetSentiment":"positive","score":3.0}];
+const SENT_COLOR = {positive:'#4A6B4F', negative:'#9A3B34', neutral:'#C08A2D'};
+let analyzed = {};      // id -> {sentiment, theme}
+let summary = "";
+let filter = "all";
+
+const $ = id => document.getElementById(id);
+
+async function geminiCall(prompt, key, model){
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+  const res = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-goog-api-key':key},
+    body: JSON.stringify({ contents:[{parts:[{text:prompt}]}] })
+  });
+  if(!res.ok){
+    const t = await res.text();
+    throw new Error('Gemini ' + res.status + ': ' + t.slice(0,140));
+  }
+  const data = await res.json();
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  return parts.map(p=>p.text||'').join('');
+}
+
+async function classifyBatch(reviews, key, model){
+  const list = reviews.map((r,i)=>`${i+1}. ${r.text.slice(0,400)}`).join('\n');
+  const prompt = `You are a sentiment analysis engine. For each numbered customer review below, classify sentiment as exactly "positive", "negative", or "neutral", and give a 1-3 word theme (e.g. "battery life", "build quality", "shipping").
+
+Reviews:
+${list}
+
+Respond with ONLY a JSON array, no markdown, no preamble. Each element: {"i": <number>, "sentiment": "<positive|negative|neutral>", "theme": "<short theme>"}`;
+  let txt = await geminiCall(prompt, key, model);
+  txt = txt.replace(/```json|```/g,'').trim();
+  return JSON.parse(txt);
+}
+
+async function generateSummary(results, key, model){
+  $('sumStatus').textContent = 'writing…';
+  const rows = Object.values(results);
+  const counts = {positive:0,negative:0,neutral:0}; const themeCount={};
+  rows.forEach(a=>{counts[a.sentiment]=(counts[a.sentiment]||0)+1; if(a.theme) themeCount[a.theme]=(themeCount[a.theme]||0)+1;});
+  const topThemes = Object.entries(themeCount).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([t,n])=>`${t} (${n})`).join(', ');
+  const prompt = `You are a data analyst writing an executive summary of customer review sentiment for a product team. Data from ${rows.length} analyzed reviews:
+
+Sentiment: ${counts.positive} positive, ${counts.neutral} neutral, ${counts.negative} negative.
+Most-mentioned themes (with counts): ${topThemes}.
+
+Write a concise 3-4 sentence executive summary in plain business English. State the overall sentiment picture, the biggest strength, and the top 1-2 issues to fix. Be specific and actionable. No bullet points, headers, or markdown — just clear prose.`;
+  try{ summary = (await geminiCall(prompt, key, model)).trim(); }
+  catch(e){ summary = 'Could not generate summary: ' + e.message; }
+  $('summaryText').textContent = summary;
+  $('sumStatus').textContent = '';
+}
+
+function computeStats(){
+  const ids = Object.keys(analyzed);
+  const rows = REVIEWS.filter(r=>analyzed[r.id]);
+  const counts={positive:0,negative:0,neutral:0}; let agree=0;
+  const themes={}, negThemes={};
+  rows.forEach(r=>{
+    const a=analyzed[r.id];
+    counts[a.sentiment]=(counts[a.sentiment]||0)+1;
+    if(a.sentiment===r.datasetSentiment) agree++;
+    if(a.theme){themes[a.theme]=(themes[a.theme]||0)+1; if(a.sentiment==='negative') negThemes[a.theme]=(negThemes[a.theme]||0)+1;}
+  });
+  return {
+    n:rows.length, counts,
+    agreement: rows.length?Math.round(agree/rows.length*100):0,
+    topThemes:Object.entries(themes).sort((a,b)=>b[1]-a[1]).slice(0,8),
+    topNeg:Object.entries(negThemes).sort((a,b)=>b[1]-a[1]).slice(0,6)
+  };
+}
+
+function renderDonut(counts){
+  const svg=$('donut'); svg.innerHTML='';
+  const total=(counts.positive||0)+(counts.neutral||0)+(counts.negative||0);
+  if(!total) return;
+  const segs=[['positive',counts.positive||0],['neutral',counts.neutral||0],['negative',counts.negative||0]];
+  const cx=90,cy=90,r=62,sw=28; let a0=-Math.PI/2;
+  segs.forEach(([k,v])=>{
+    if(!v) return;
+    const frac=v/total, a1=a0+frac*2*Math.PI;
+    const x0=cx+r*Math.cos(a0), y0=cy+r*Math.sin(a0);
+    const x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1);
+    const large=frac>0.5?1:0;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`);
+    p.setAttribute('fill','none'); p.setAttribute('stroke',SENT_COLOR[k]); p.setAttribute('stroke-width',sw);
+    svg.appendChild(p); a0=a1;
+  });
+}
+
+function renderThemes(topThemes){
+  const box=$('themes'); box.innerHTML='';
+  const max=Math.max(1,...topThemes.map(t=>t[1]));
+  topThemes.forEach(([name,val])=>{
+    const row=document.createElement('div'); row.className='bar-row';
+    row.innerHTML=`<div class="name">${name}</div><div class="track"><div class="fill" style="width:${val/max*100}%"></div></div><div class="val mono">${val}</div>`;
+    box.appendChild(row);
+  });
+}
+
+function renderKpis(s){
+  const items=[
+    {k:'Reviews analyzed',v:s.n},
+    {k:'AI ↔ dataset agreement',v:s.agreement+'%'},
+    {k:'Positive',v:s.counts.positive||0,c:'var(--pos)'},
+    {k:'Neutral',v:s.counts.neutral||0,c:'var(--neu)'},
+    {k:'Negative',v:s.counts.negative||0,c:'var(--neg)'},
+  ];
+  $('kpis').innerHTML=items.map(m=>`<div class="kpi"><div class="k mono">${m.k}</div><div class="v" style="color:${m.c||'var(--ink)'}">${m.v}</div></div>`).join('');
+}
+
+function renderComplaints(topNeg){
+  const card=$('complaintsCard');
+  if(!topNeg.length){card.style.display='none';return;}
+  card.style.display='block';
+  $('complaints').innerHTML=topNeg.map(([t,n])=>`<span class="complaint">${t} <span class="mono" style="opacity:.6">×${n}</span></span>`).join('');
+}
+
+function renderList(){
+  const q=$('search').value.toLowerCase();
+  const rows=REVIEWS.filter(r=>{
+    const a=analyzed[r.id];
+    if(filter!=='all' && (!a||a.sentiment!==filter)) return false;
+    if(q && !r.text.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const box=$('reviewList');
+  box.innerHTML = rows.slice(0,120).map(r=>{
+    const a=analyzed[r.id];
+    const match=a&&a.sentiment===r.datasetSentiment;
+    const tag=a?`<span style="background:${SENT_COLOR[a.sentiment]};color:#fff;font-size:11px;padding:2px 8px;">AI: ${a.sentiment}</span>`:'';
+    const theme=a&&a.theme?`<span class="mono" style="font-size:11px;color:var(--faint);margin-left:auto;">${a.theme}</span>`:'';
+    const verdict=a?`<span class="mono" style="font-size:11px;color:${match?'var(--pos)':'var(--neg)'}">${match?'✓ agree':'✗ differ'}</span>`:'';
+    return `<div class="rev"><div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">${tag}<span class="mono" style="font-size:11px;color:var(--faint);">dataset: ${r.datasetSentiment}</span>${verdict}${theme}</div><div style="font-size:14px;line-height:1.5;">${r.text.slice(0,280)}${r.text.length>280?'…':''}</div></div>`;
+  }).join('') || '<div style="color:var(--faint);padding:20px;text-align:center;">No reviews match this filter.</div>';
+  $('listCount').textContent=`Showing up to 120 of ${rows.length} matching reviews.`;
+}
+
+function renderAll(){
+  const s=computeStats();
+  renderKpis(s); renderDonut(s.counts); renderThemes(s.topThemes);
+  renderComplaints(s.topNeg); renderList();
+}
+
+async function run(){
+  const key=$('apiKey').value.trim();
+  const model=$('model').value.trim()||'gemini-2.5-flash';
+  if(!key){ $('status').textContent='Paste your Gemini API key first.'; return; }
+  const limit=+$('limit').value;
+  const targets=REVIEWS.slice(0,limit);
+  analyzed={}; summary=''; $('summaryText').textContent='';
+  $('runBtn').disabled=true; $('dlBtn').style.display='none';
+  $('empty').style.display='none'; $('dash').style.display='block';
+  const BATCH=10;
+  try{
+    for(let s=0;s<targets.length;s+=BATCH){
+      const chunk=targets.slice(s,s+BATCH);
+      $('status').textContent=`Analyzing… ${Math.min(s+BATCH,targets.length)}/${targets.length}`;
+      let parsed;
+      try{ parsed=await classifyBatch(chunk,key,model); }
+      catch(e){
+        if(s===0){ throw e; } // surface key/model errors immediately
+        parsed=chunk.map((_,i)=>({i:i+1,sentiment:'neutral',theme:'unclear'}));
+      }
+      parsed.forEach(p=>{const rev=chunk[p.i-1]; if(rev) analyzed[rev.id]={sentiment:(p.sentiment||'neutral').toLowerCase(),theme:(p.theme||'').toLowerCase()};});
+      renderAll();
+    }
+    await generateSummary(analyzed,key,model);
+    $('status').textContent=`Done · ${Object.keys(analyzed).length} classified`;
+    $('dlBtn').style.display='inline-block';
+  }catch(e){
+    $('status').textContent='Error: '+e.message;
+  }
+  $('runBtn').disabled=false;
+  $('runBtn').textContent='Re-run analysis';
+}
+
+function downloadReport(){
+  const s=computeStats();
+  const date=new Date().toISOString().slice(0,10);
+  const L=[];
+  L.push('REVIEW SENTIMENT ANALYSIS REPORT');
+  L.push('Generated: '+date+' · by frazbama');
+  L.push('Data source: Amazon Reviews Dataset (Daniel Ihenacho, Kaggle, MIT License)');
+  L.push('Engine: Google Gemini');
+  L.push('='.repeat(60)); L.push('');
+  L.push('EXECUTIVE SUMMARY'); L.push('-'.repeat(60));
+  L.push(summary||'(not generated)'); L.push('');
+  L.push('KEY METRICS'); L.push('-'.repeat(60));
+  L.push('Reviews analyzed:        '+s.n);
+  L.push('AI/dataset agreement:    '+s.agreement+'%');
+  L.push('Positive:                '+(s.counts.positive||0));
+  L.push('Neutral:                 '+(s.counts.neutral||0));
+  L.push('Negative:                '+(s.counts.negative||0)); L.push('');
+  L.push('TOP THEMES'); L.push('-'.repeat(60));
+  s.topThemes.forEach(([t,n])=>L.push('  '+t.padEnd(30)+n)); L.push('');
+  L.push('LEADING COMPLAINTS (from negative reviews)'); L.push('-'.repeat(60));
+  s.topNeg.forEach(([t,n])=>L.push('  '+t.padEnd(30)+n)); L.push('');
+  L.push('METHOD'); L.push('-'.repeat(60));
+  L.push('Each review was classified live by Google Gemini (sentiment +');
+  L.push('theme extraction), then cross-checked against the dataset\'s');
+  L.push('original human labels to measure agreement.');
+  const blob=new Blob([L.join('\n')],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='sentiment-report-'+date+'.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+$('runBtn').addEventListener('click',run);
+$('dlBtn').addEventListener('click',downloadReport);
+$('search').addEventListener('input',renderList);
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); filter=c.dataset.f; renderList();
+}));
+</script>
+</body>
+</html>
