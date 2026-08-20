@@ -10,15 +10,24 @@ Data analyst combining hands-on analytics skills (Power BI, Tableau, R) with dee
 
 ---
 
+## 🔴 Live AI Demo — Sentinel
+
+**[▶ Launch Review Sentiment Ledger](https://frazbama.github.io/daportfolio/Sentinel/)** &nbsp;·&nbsp; [View code](https://github.com/frazbama/daportfolio/tree/main/Sentinel)
+
+An AI-powered voice-of-customer tool built on **Google Gemini** — running live in your browser. It classifies Amazon product reviews by sentiment, extracts recurring themes and complaints, writes a plain-English executive summary, and **validates every AI verdict against the dataset's human labels** to report an agreement rate. Bring your own Gemini API key and run it on 30–150 reviews. *(Full write-up as Project 5 below.)*
+
+---
+
 ## 🛠️ Skills & Tools
 
 |Category|Tools|
 |-|-|
 |**BI & Visualization**|Power BI Desktop, Power Query, DAX, Tableau|
 |**Data Analysis**|R, Google Data Analytics Framework|
+|**AI & Automation**|Google Gemini API, LLM-assisted analysis, prompt engineering|
 |**Data Modeling**|Star Schema, Tabular Editor, Relationship Management|
 |**Digital Marketing Analytics**|ROAS, CPA, CTR, CVR, Ad Spend Analysis|
-|**Other**|GitHub, Excel, SQL (basic), Python (basic)|
+|**Other**|GitHub, GitHub Pages, HTML/JS, Excel, SQL (basic), Python (basic)|
 
 ---
 
@@ -164,20 +173,60 @@ Google Data Analytics capstone case study using R — analysing Fitbit smart dev
 
 ---
 
+### 🌟 Project 5 — Sentinel: AI Review Sentiment Ledger
+[**▶ Launch Live Demo →**](https://frazbama.github.io/daportfolio/Sentinel/) &nbsp;·&nbsp; [**View Project →**](https://github.com/frazbama/daportfolio/tree/main/Sentinel)
+
+> **Core problem solved:** Product and marketing teams sit on thousands of unstructured customer reviews with no fast way to turn them into a prioritised list of what's working and what to fix.
+> **Decision it enables:** Where to act first — which strengths to amplify in marketing and which recurring complaints the product team must address — backed by a plain-English executive summary.
+
+A live, browser-based AI application that reads Amazon product reviews and turns them into a voice-of-customer dashboard. Google's **Gemini** model classifies each review's sentiment, extracts a short theme, and the app then **cross-checks every AI verdict against the dataset's original human labels** — reporting an agreement rate so the analysis is validated, not just asserted. It closes with an AI-written executive summary and a downloadable report.
+
+**The Story:** Every business drowns in customer feedback but starves for direction. The reviews are right there — thousands of them — yet turning that raw text into "amplify this, fix that" takes time nobody has. I built a tool that does it in seconds, and, crucially, that *checks its own work* against known labels so a reader can trust the numbers before acting on them.
+
+**Key Findings (representative run, 50 reviews):**
+* 🎯 **74% agreement** between Gemini's sentiment calls and the dataset's human labels — a validated, defensible read
+* 📈 Sentiment was **sharply polarised** — near-even positive and negative, with little neutral middle ground
+* 💡 Top strength: **build quality and durability**, frequently praised alongside sound quality
+* 👥 Top complaints to fix: **battery life** and **overall product failure** — the recurring reliability themes dragging sentiment down
+
+**How it works:**
+| Stage | What happens |
+|-|-|
+| Classify | Reviews sent to Gemini in batches; each gets a sentiment + a 1–3 word theme |
+| Validate | AI verdict compared to the dataset's human label → agreement rate |
+| Visualise | Sentiment mix, most-mentioned themes, leading complaints, searchable review explorer |
+| Summarise | Gemini writes a 3–4 sentence executive summary for a product team |
+| Export | One-click downloadable `.txt` report with metrics, themes and summary |
+
+**Technical Highlights:**
+* Standalone HTML/JS app deployed live on **GitHub Pages** — no build step, opens in any browser
+* Direct **Google Gemini API** integration via `generateContent` (model configurable; defaults to the latest Flash)
+* Batched requests with graceful fallback and live progress; results render progressively
+* **Bring-your-own-key** design — the API key stays in the user's browser and is never stored in the repo (demonstrates API-security awareness)
+* AI output validated against ground-truth labels — treating the model as a hypothesis to be checked, not a black box
+
+**Tools:** HTML · JavaScript · Google Gemini API · GitHub Pages
+**Sector:** Ecommerce · Voice-of-Customer · AI / NLP
+**Data:** Amazon Reviews Dataset (Daniel Ihenacho, Kaggle, MIT License) — sentiment, cleaned review text, 1–5 score
+
+---
+
 ## 📊 Portfolio Roadmap
 
-A growing collection of Power BI projects spanning multiple industry verticals. As part of an ongoing portfolio development programme, the following projects are complete, in progress, or planned:
+A growing collection of Power BI and AI projects spanning multiple industry verticals. As part of an ongoing portfolio development programme, the following projects are complete, in progress, or planned:
 
 | # | Project | Sector | Status |
 |---|---------|--------|--------|
 | 1 | Trueleaf Provisions Marketing Dashboard | F&B | ✅ Completed |
 | 2 | GlowCo Dashboard | Ecommerce | ✅ Completed |
 | 3 | AdventureWorks Dashboard | Retail | ✅ Completed |
-| 4 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
-| 5 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
-| 6 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
-| 7 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
-| 8 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
+| 4 | Bellabeat Smart Device Case Study | Health & Wellness | ✅ Completed |
+| 5 | Sentinel — AI Review Sentiment Ledger | Ecommerce · AI/NLP | ✅ Completed |
+| 6 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
+| 7 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
+| 8 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
+| 9 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
+| 10 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
 
 Each project incorporates digital marketing and ad spend data alongside core business metrics — demonstrating cross-functional analytical thinking across multiple industry verticals.
 
@@ -202,4 +251,4 @@ I am available for data analytics consulting, freelance dashboard development an
 
 ---
 
-*Portfolio actively maintained and updated. Last updated: July 2026.*
+*Portfolio actively maintained and updated. Last updated: August 2026.*
