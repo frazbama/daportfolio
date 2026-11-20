@@ -241,6 +241,36 @@ A one-page Power BI report built on Agriculture and Agri-Food Canada / Statistic
 
 ---
 
+### 🌟 Project 7 — Can the Pacific Ocean Sign a Trade Deal? El Niño, Lentils and India (Nature Shire Market Intelligence)
+[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/elnino-lentils-india)
+
+> **Core problem solved:** With Canada and India racing to close a trade deal and a record El Niño under way, Canadian pulse exporters needed to know whether a weather shock to a competitor would hand them India's lentil market.
+> **Decision it enables:** Whether to plan around competitors' weather or around market access: tariffs, quotas and trade agreements.
+
+The first of the **Data Detours** series: joining datasets that rarely meet (35 years of Pacific Ocean temperatures, lentil harvests in five countries and 25 years of India's import records) to test a two-step hypothesis with Python and present it in Power BI.
+
+**The Story:** El Niño hits Australia's lentil crop hard, so a strong El Niño should help Canada sell to India. The data says the first half is true and the second is a myth. Trade policy, not weather, decides who supplies India, and Australia's 2022 trade deal let it overtake Canada in 2024.
+
+**Key Findings:**
+* 🎯 In El Niño seasons Australia's lentil yields average **19% below trend**; in La Niña seasons **24% above** (r = −0.40, p = 0.016, 35 seasons)
+* 📈 Canada, India, Türkiye and the USA show **no significant El Niño effect**
+* 💡 A poor Australian harvest does **not** reliably shift India's purchases to Canada (r = −0.26, p = 0.21)
+* 👥 After India's 30% tariff (Dec 2017), Canadian lentil sales to India fell from **791,000 t to 142,000 t**; Canada's share fell from **85% (2020) to 44% (2024)** as Australia overtook it
+* 🌊 Australia's 2026 crop grew under the **strongest growing-season El Niño on record**
+
+**Technical Highlights:**
+* Python (pandas, SciPy): detrended yield anomalies, crop-specific growing-season El Niño averages, Pearson tests, robustness check on 2000–2024
+* Reproducible pipeline: raw downloads → `scripts/prep.py` → three tidy, Power BI-ready tables
+* Power BI: shaded El Niño / La Niña threshold zones, phase-coloured columns, custom % format strings, consistent palette and source credits across all charts
+* Policy context fact-checked against USDA FAS, the Australian Department of Agriculture and Reuters
+* Google Data Analytics Framework: Ask → Prepare → Process → Analyze → Share → Act
+
+**Tools:** Python (pandas, SciPy) · Power BI Desktop · Power Query
+**Sector:** Agri-food · Commodity Trade · Climate Risk
+**Data:** NOAA Climate Prediction Center (ONI, 1950–2026) · FAOSTAT production (1990–2024) and detailed trade matrix (2000–2024)
+
+---
+
 ## 📊 Portfolio Roadmap
 
 A growing collection of Power BI and AI projects spanning multiple industry verticals. As part of an ongoing portfolio development programme, the following projects are complete, in progress, or planned:
@@ -253,11 +283,12 @@ A growing collection of Power BI and AI projects spanning multiple industry vert
 | 4 | Bellabeat Smart Device Case Study | Health & Wellness | ✅ Completed |
 | 5 | Sentinel — AI Review Sentiment Ledger | Ecommerce · AI/NLP | ✅ Completed |
 | 6 | Canada's Honey: Commodity or Craft? (Nature Shire Market Intelligence) | Agri-food | ✅ Completed |
-| 7 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
-| 8 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
-| 9 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
-| 10 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
-| 11 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
+| 7 | El Niño, Lentils and India (Nature Shire Market Intelligence · Data Detours #1) | Agri-food · Trade | ✅ Completed |
+| 8 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
+| 9 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
+| 10 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
+| 11 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
+| 12 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
 
 Each project incorporates digital marketing and ad spend data alongside core business metrics — demonstrating cross-functional analytical thinking across multiple industry verticals.
 
