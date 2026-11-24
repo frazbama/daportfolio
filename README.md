@@ -1,6 +1,6 @@
 # Fraz Shafique — Data Analytics Portfolio
 
-### E-Commerce Analyst | BI Developer | Digital Marketing Analytics
+### E-Commerce Analyst | BI Developer | Retail Media & Digital Marketing Analytics
 
 **I turn business problems into decisions.** Two decades running F&B, trade and marketing businesses across the UAE, GCC, UK, Pakistan, Canada and the USA taught me the question every founder actually asks: *"So what do I do about it?"* I build Power BI dashboards that answer it — connecting revenue, margin, returns and ad spend into one view that drives action, not just visuals.
 
@@ -22,18 +22,48 @@ An AI-powered voice-of-customer tool built on **Google Gemini** — running live
 
 |Category|Tools|
 |-|-|
-|**BI & Visualization**|Power BI Desktop, Power Query, DAX, Tableau|
+|**BI & Visualization**|Power BI Desktop, Power Query (M), DAX, DAX Query View, Tableau|
 |**Data Analysis**|R, Google Data Analytics Framework|
 |**AI & Automation**|Google Gemini API, LLM-assisted analysis, prompt engineering|
-|**Data Modeling**|Star Schema, Tabular Editor, Relationship Management|
-|**Digital Marketing Analytics**|ROAS, CPA, CTR, CVR, Ad Spend Analysis|
-|**Other**|GitHub, GitHub Pages, HTML/JS, Excel, SQL (basic), Python (basic)|
+|**Data Modeling**|Star Schema, Tabular Editor (C# scripting), Relationship Management|
+|**Digital Marketing & Retail Media**|ROAS, CPA, CTR, CVR, Ad Spend Analysis, New-to-Brand, Lift & Incrementality|
+|**Other**|GitHub, GitHub Pages, HTML/JS, Excel, SQL (DuckDB), Python (pandas, SciPy)|
 
 ---
 
 ## 📁 Portfolio Projects
 
 Each project is framed around the **core problem it solves** and the **decision it enables** — because a dashboard is only as good as the action it drives.
+
+---
+
+### 🌟 Featured — Instacart Brand Scorecard: Yogurt Category (Retail Media · CPG)
+[**View Project →**](https://github.com/frazbama/daportfolio/tree/main/instacart-brand-scorecard) &nbsp;·&nbsp; [**Fage PDF**](https://github.com/frazbama/daportfolio/blob/main/instacart-brand-scorecard/pdf/Instacart_Brand_Scorecard_Fage.pdf) &nbsp;·&nbsp; [**Noosa PDF**](https://github.com/frazbama/daportfolio/blob/main/instacart-brand-scorecard/pdf/Instacart_Brand_Scorecard_Noosa.pdf)
+
+> **Core problem solved:** A CPG brand spends on retail media without knowing whether its gap is *recruiting* new buyers or *keeping* them, so budget goes to the wrong lever.
+> **Decision it enables:** Which SKUs, dayparts, basket occasions and competitor searches to fund on Instacart Ads, with a test-and-holdout plan to measure incremental sales.
+
+A five-page, brand-agnostic Power BI category scorecard built on Instacart's public 2017 Market Basket data (33.8M order lines), presented the way a retail media insights team would present to a brand partner. One tile slicer switches the whole report, including its written recommendations, between the six named yogurt brands.
+
+**The Story:** Fage leads yogurt with 23.4% of purchases, yet it recruits fewer new buyers than the aisle. Ten of its SKUs convert whoever tries them but rarely get tried. Switch to Noosa and the story flips: it recruits well but loses buyers after the first purchase.
+
+**Key Findings (Fage):**
+* 🎯 **23.4%** share of aisle, **3.2×** the next named brand, and **7 of the aisle's top 10** products
+* 📈 Trial index **94** vs reorder index **103**: a loyalty brand that under-recruits
+* 💡 **10 hidden-gem SKUs** reorder at **72.5%** with below-median trial; closing the gap is worth about **19,563** purchases (**+5.8%** brand volume, illustrative)
+* 👥 Fage baskets are **2.4×** as likely to include granola, and **Siggi's** is the rival most often in the same basket: the conquest target
+
+**Technical Highlights:**
+* **DuckDB SQL** pre-aggregation of 33.8M order lines into compact fact tables; brands inferred from product-line keywords plus basket-lift evidence
+* About **125 DAX measures**: RANKX, TOPN cumulative share, MEDIANX thresholds, lift and excess reach, and SWITCH-driven text that rewrites titles and recommendations per brand
+* Synced **button slicer** on a disconnected brand table, ordered by share in Power Query
+* **Tabular Editor C# scripts** for bulk measures and model hygiene; measures tested across all brands in **DAX query view** and written back with *Update model*
+* Dumbbell chart built from a line chart with error bars; share-index heatmap with diverging conditional formatting
+* Google Data Analytics Framework: Ask → Prepare → Process → Analyze → Share → Act
+
+**Tools:** Power BI Desktop · DAX · DAX Query View · Power Query (M) · DuckDB SQL · Tabular Editor
+**Sector:** Retail Media · Online Grocery · CPG / F&B
+**Data:** Instacart Online Grocery Shopping Dataset 2017 (non-commercial; not redistributed) · 3.4M orders · 49,688 products
 
 ---
 
@@ -284,11 +314,12 @@ A growing collection of Power BI and AI projects spanning multiple industry vert
 | 5 | Sentinel — AI Review Sentiment Ledger | Ecommerce · AI/NLP | ✅ Completed |
 | 6 | Canada's Honey: Commodity or Craft? (Nature Shire Market Intelligence) | Agri-food | ✅ Completed |
 | 7 | El Niño, Lentils and India (Nature Shire Market Intelligence · Data Detours #1) | Agri-food · Trade | ✅ Completed |
-| 8 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
-| 9 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
-| 10 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
-| 11 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
-| 12 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
+| 8 | Instacart Brand Scorecard: Yogurt Category | Retail Media · CPG | ✅ Completed |
+| 9 | Dashboards for Canadian Food and Beverage Brands | F&B | 🔄 In Progress & Ongoing |
+| 10 | Dental Clinic Performance Dashboard | Healthcare | 🔄 In Progress |
+| 11 | Digital Marketing Agency Dashboard | Marketing Analytics | 📋 Planned |
+| 12 | Retail Clothing Store Ad Spend Analysis | Retail | 📋 Planned |
+| 13 | BC Ski Resort 3-Year Performance Dashboard | Tourism | 📋 Planned |
 
 Each project incorporates digital marketing and ad spend data alongside core business metrics — demonstrating cross-functional analytical thinking across multiple industry verticals.
 
